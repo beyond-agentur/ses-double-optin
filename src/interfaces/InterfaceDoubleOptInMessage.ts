@@ -1,7 +1,6 @@
-import { URL } from 'url';
+import { URL } from "url";
 
-export interface DoubleOptInMessage
-{
+export interface InterfaceDoubleOptInMessage {
     templateHtml: string;
     templateText: string;
 
