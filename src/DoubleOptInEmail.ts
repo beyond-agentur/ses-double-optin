@@ -112,6 +112,7 @@ export class DoubleOptInEmail {
 
     private generateToken(): Token {
         const token: Token = sign( {
+            iat:  Math.floor( Date.now() / 1000 ),
             from: this.getAddress( this.from ),
             to:   this.getAddress( this.to ),
             ...this.payload,
