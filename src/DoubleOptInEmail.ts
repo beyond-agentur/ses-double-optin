@@ -10,6 +10,7 @@ import { Token } from "./types";
 export class DoubleOptInEmail {
     private from: InterfaceEmailAddress = { name: "", address: "" };
     private to: InterfaceEmailAddress = { name: "", address: "" };
+    private payload: object = {};
 
     private subject: string = "Verify your email address";
 
@@ -28,6 +29,10 @@ export class DoubleOptInEmail {
     };
 
     constructor( private config: Config, private privateKey: Secret, private publicKey: string | Buffer, private validationURL: URL ) {
+    }
+
+    public setPayload( payload: object ): void {
+        this.payload = payload;
     }
 
     public setTo( address: string, name: string ): void {
@@ -108,6 +113,7 @@ export class DoubleOptInEmail {
         const token: Token = sign( {
             from: this.getAddress( this.from ),
             to:   this.getAddress( this.to ),
+            ...this.payload,
         }, this.privateKey );
 
         return token;
