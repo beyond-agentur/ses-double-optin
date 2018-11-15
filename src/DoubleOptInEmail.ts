@@ -1,4 +1,4 @@
-import { sign } from "jsonwebtoken";
+import { Secret, sign, verify } from "jsonwebtoken";
 import format = require("string-template");
 import { URL } from "url";
 import { InterfaceEmailAddress } from "./interfaces/InterfaceEmailAddress";
@@ -10,7 +10,7 @@ export class DoubleOptInEmail {
     private from: InterfaceEmailAddress = { name: "", address: "" };
     private to: InterfaceEmailAddress = { name: "", address: "" };
 
-    private subject: string = "Verify your npm email address";
+    private subject: string = "Verify your email address";
 
     private body: InterfaceEmailContent = {
         html: "",
@@ -26,7 +26,7 @@ export class DoubleOptInEmail {
                   "Kind regards!",
     };
 
-    constructor( private privateKey: string, private validationURL: URL ) {
+    constructor( private privateKey: Secret, private publicKey: string | Buffer, private validationURL: URL ) {
     }
 
     public setTo( address: string, name: string ): void {
@@ -92,6 +92,15 @@ export class DoubleOptInEmail {
         } );
 
         return promise;
+    }
+
+    public validateToken( token: Token ): boolean {
+        try {
+            verify( token, this.publicKey );
+            return true;
+        } catch ( e ) {
+            throw e;
+        }
     }
 
     private generateToken(): Token {
