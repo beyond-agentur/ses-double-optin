@@ -91,6 +91,7 @@ export class DoubleOptInEmail {
                 resolve( {
                     messageId: response.MessageId,
                     token,
+                    ...this.payload,
                 } );
             } ).catch( ( error ) => {
                 reject( error );
