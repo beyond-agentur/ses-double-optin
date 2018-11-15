@@ -15,12 +15,12 @@ export class DoubleOptInEmail {
 
     private body: InterfaceEmailContent = {
         html: "",
-        text: "Hi ${name}!\n" +
+        text: "Hi {name}!\n" +
                   "\n" +
                   "Welcome to our service! To verify your email so that you can publish packages," +
                   "click the following link:\n" +
                   "\n" +
-                  "${validationURL}\n" +
+                  "{validationURL}\n" +
                   "\n" +
                   "Thanks for joining.\n" +
                   "\n" +
