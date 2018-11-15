@@ -1,3 +1,4 @@
+import { Config } from "aws-sdk";
 import { Secret, sign, verify } from "jsonwebtoken";
 import format = require("string-template");
 import { URL } from "url";
@@ -26,7 +27,7 @@ export class DoubleOptInEmail {
                   "Kind regards!",
     };
 
-    constructor( private privateKey: Secret, private publicKey: string | Buffer, private validationURL: URL ) {
+    constructor( private config: Config, private privateKey: Secret, private publicKey: string | Buffer, private validationURL: URL ) {
     }
 
     public setTo( address: string, name: string ): void {
@@ -62,7 +63,7 @@ export class DoubleOptInEmail {
 
     public send(): Promise<any> {
         const promise = new Promise( ( resolve, reject ) => {
-            const sesMail = new SesEmail( this.getAddress( this.from ), this.getAddress( this.to ) );
+            const sesMail = new SesEmail( this.config, this.getAddress( this.from ), this.getAddress( this.to ) );
             const token = this.generateToken();
 
             sesMail.setSubject( this.subject );

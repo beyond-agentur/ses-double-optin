@@ -1,3 +1,4 @@
+import { Config } from "aws-sdk";
 import { SES } from "aws-sdk/clients/all";
 import { SendEmailRequest } from "aws-sdk/clients/ses";
 import { AWSError } from "aws-sdk/lib/error";
@@ -21,7 +22,7 @@ export class SesEmail {
         Source: "",
     };
 
-    constructor( private from: string, private to: string ) {
+    constructor( private config: Config, private from: string, private to: string ) {
         this.params.Source = from;
 
         if ( to !== "" && this.params.Destination.ToAddresses ) {
@@ -48,6 +49,6 @@ export class SesEmail {
     }
 
     public send(): Promise<PromiseResult<SES.SendEmailResponse, AWSError>> {
-        return new SES( { apiVersion: "2010-12-01" } ).sendEmail( this.params ).promise();
+        return new SES( this.config ).sendEmail( this.params ).promise();
     }
 }
