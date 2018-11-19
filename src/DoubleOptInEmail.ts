@@ -103,13 +103,13 @@ export class DoubleOptInEmail {
 
     public validateToken( token: Token ): Promise<string | object> {
         return new Promise<any>( ( resolve, reject ) => {
-            verify( token, this.publicKey, ( ( err, decoded ) => {
+            verify( token, this.publicKey, { algorithms: [ "RS256" ] }, ( err, decoded ) => {
                 if ( err ) {
                     return reject( err );
                 }
 
                 resolve( decoded );
-            } ) );
+            } );
         } );
     }
 
@@ -119,7 +119,7 @@ export class DoubleOptInEmail {
             from: this.getAddress( this.from ),
             to:   this.getAddress( this.to ),
             ...this.payload,
-        }, this.privateKey );
+        }, this.privateKey, { algorithm: "RS256" } );
 
         return token;
     }
