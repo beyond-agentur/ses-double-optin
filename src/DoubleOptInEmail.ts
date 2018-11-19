@@ -101,13 +101,16 @@ export class DoubleOptInEmail {
         return promise;
     }
 
-    public validateToken( token: Token ): boolean {
-        try {
-            verify( token, this.publicKey );
-            return true;
-        } catch ( e ) {
-            throw e;
-        }
+    public validateToken( token: Token ): Promise<string | object> {
+        return new Promise<any>( ( resolve, reject ) => {
+            verify( token, this.publicKey, ( ( err, decoded ) => {
+                if ( err ) {
+                    return reject( err );
+                }
+
+                resolve( decoded );
+            } ) );
+        } );
     }
 
     private generateToken(): Token {
